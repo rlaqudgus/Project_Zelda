@@ -67,14 +67,14 @@
         //생성하는 클래스가 어떤 놈인가? 에 따라 스택에 푸쉬할지 안할지,
         //매니저가 알고 있어야 할 정보 입력, 리스트 add 등의 로직 수행
         //현재 아이템이 생성될때는 로직이 좀 헐겁다.. 어쩔 수 없이 아이템만 불값 매개변수를 받아서 다른 처리를 해주자
-        static public void CreateInstance<T>(bool isItem)
+        static public void CreateInstance<T>(bool isInstant)
         {
             Zelda instance = (Zelda)Activator.CreateInstance(typeof(T), "New Class " + typeof(T).Name + " has been instantiated");
             //GetZeldas.Push(instance);
 
             SwitchCurrentState(instance);
 
-            if (isItem)
+            if (isInstant)
             {
                 instance.ZeldaSelect();
             }

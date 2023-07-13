@@ -10,7 +10,7 @@ namespace classDesign
         public ZeldaLauncher(string explain)
         {
             ZeldaLog(explain);
-            ZeldaManager.GetZeldas.Push(this);
+            //ZeldaManager.GetZeldas.Push(this);
         }
         public enum Mode { New_Game = 1, Load_Game };
         public void StartGame()
