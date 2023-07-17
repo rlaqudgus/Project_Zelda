@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrator\\Documents\\GitHub\\GamePortfolio\\classDesign\\classDesign.csproj": {}
+    "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrator\\Documents\\GitHub\\GamePortfolio\\classDesign\\classDesign.csproj": {
+    "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrator\\Documents\\GitHub\\GamePortfolio\\classDesign\\classDesign.csproj",
+        "projectUniqueName": "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
         "projectName": "classDesign",
-        "projectPath": "C:\\Users\\Administrator\\Documents\\GitHub\\GamePortfolio\\classDesign\\classDesign.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrator\\Documents\\GitHub\\GamePortfolio\\classDesign\\obj\\",
+        "projectPath": "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
+        "packagesPath": "C:\\Users\\ugane\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ugane\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -45,7 +45,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -54,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }

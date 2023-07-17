@@ -1,4 +1,6 @@
 ﻿
+using static classDesign.ZeldaCreature;
+
 namespace classDesign
 {
     class ZeldaLauncher : Zelda
@@ -502,8 +504,7 @@ namespace classDesign
                         ZeldaSelect();
                         break;
                     case "3":
-                        ZeldaLog("준비중");
-                        ZeldaSelect();
+                        ZeldaManager.CreateInstance<ZeldaMotel>(false);
                         break;
                     default:
                         break;
@@ -626,5 +627,55 @@ namespace classDesign
 
     }
 
+    class ZeldaMotel : Zelda
+    {
+        public ZeldaMotel()
+        {
+            ZeldaLog("휴식을 취하러 이동합니다.");
+        }
+
+        public ZeldaMotel(string explain)
+        {
+            ZeldaLog(explain);
+        }
+
+        public enum Rest {GetRest = 1, GoBack};
+        public override void ZeldaSelect()
+        {
+            ZeldaChoice<Rest>("휴식을 취하겠습니까?");
+            ZeldaLogic(ZeldaInput());
+        }
+
+        public override void ZeldaLogic(string input)
+        {
+            int MaxHP = 4;
+            try
+            {
+                ZeldaThrow(input);
+                switch (input)
+                {
+                    case "1":
+                        ZeldaLog($"체력이 {MaxHP} 회복되었습니다.");
+                        ZeldaManager.currentLink.hp = MaxHP; //Max HP를 설정해 둘 것
+                        break;
+
+                    case "2":
+                        ZeldaManager.MoveBack();
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ZeldaCatch(ex);
+            }
+            finally
+            {
+                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+            }
+        }
+    }
 
 }
