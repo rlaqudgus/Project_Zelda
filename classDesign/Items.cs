@@ -12,6 +12,7 @@ namespace classDesign
             type = Type.food;
             ability = Ability.Normal;
             effect = 1;
+            cost = 10;
             ZeldaLog(explain);
         }
 
@@ -26,8 +27,9 @@ namespace classDesign
         //그렇다면 인벤에서 접근했을때는?
         public override void ZeldaSelect()
         {
-            ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
         }
 
         //public override void ItemSelect()
@@ -46,17 +48,23 @@ namespace classDesign
 
     class Spear : ZeldaItem
     {
+        public Spear(string explain)
+        {
+            ZeldaLog(explain);
+            cost = 100;
+        }
         public Spear(Type type, Ability ability, int effect)
         {
             this.type = type;
             this.ability = ability;
             this.effect = effect;
-
+            cost = 100;
         }
         public override void ZeldaSelect()
         {
-            ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
         }
 
         //public override void ItemSelect()
@@ -89,13 +97,14 @@ namespace classDesign
             ZeldaLog(explain);
             type = Type.Material;
             ability = Ability.Normal;
-
+            cost = 10;
         }
 
         public override void ZeldaSelect()
         {
-            ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base .ZeldaSelect();
         }
     }
 
@@ -106,39 +115,15 @@ namespace classDesign
             ZeldaLog(explain);
             type = Type.Material;
             ability = Ability.Normal;
+            cost = 10;
         }
 
         public override void ZeldaSelect()
         {
-            ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
         }
     }
-
-    //class BigMeat : ZeldaItem
-    //{
-    //    //int hpEffect = 3;
-    //    public BigMeat(string explain)
-    //    {
-    //        type = Type.food;
-    //        ability = Ability.Normal;
-    //        effect = 3;
-    //        ZeldaLog(explain);
-    //    }
-    //    public override void ZeldaSelect()
-    //    {
-    //        ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-    //        base.ZeldaLogic(ZeldaInput());
-    //    }
-
-    //    public override void ItemEffect()
-    //    {
-    //        ZeldaLog("링크를 " + effect + " 만큼 회복시켰다.");
-    //        base.ItemEffect();
-    //        //ZeldaManager.currentLink.hp += hpEffect;
-    //    }
-    //}
-
-
 
 }

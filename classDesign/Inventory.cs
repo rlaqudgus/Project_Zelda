@@ -11,7 +11,8 @@
         {
             //UI
             ZeldaChoice(itemList, "아이템을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //base.ZeldaLogic(ZeldaInput());
+            ZeldaLogic(itemList, ZeldaInput());
             //로직
             //인풋에 따라 다른 인벤토리 아이템 분기가 나타나게
 
@@ -49,7 +50,7 @@
         {
             //UI
             ZeldaChoice(itemList, "아이템을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            ZeldaLogic(itemList, ZeldaInput());
             //로직
             //인풋에 따라 다른 인벤토리 아이템 분기가 나타나게
 

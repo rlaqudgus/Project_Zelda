@@ -95,7 +95,8 @@ namespace classDesign
         //public List<ZeldaItem> foodList = new List<ZeldaItem>();
         //public List<ZeldaItem> clothesList = new List<ZeldaItem>();
         public enum LinkFunction { Warp = 1, Hunt, MarketPlace, Motel, Inven }
-        public enum LinkState { Alive, Dead }
+        public enum LinkState { Alive, Dead , Hunt, Inventory, Sell, Buy }
+        public LinkState state;
 
         public string name;
         public int hp;
@@ -216,19 +217,6 @@ namespace classDesign
                 ZeldaManager.GetZeldas.Peek().ZeldaSelect();
             }
 
-            //if (input == "1")
-            //{
-            //    //직접 생성하지 말고 메서드 사용하자 매니저 클래스 오버로딩하나 더해서
-            //    //ZeldaRegion zeldaRegion = new ZeldaRegion("\nZeldaRegion 클래스는 플레이어가 \"시작\"을 입력했을 때 생성되는 게임의 가장 초기 클래스.\n플레이어는 해당 클래스 내부에 정의되어 있는 Region 중 하나로 이동할 수 있다.");
-            //    ZeldaManager.CreateInstance<ZeldaRegion>(input);
-            //}
-
-            //else if (input == "2" || input == "3" || input == "4" || input == "5")
-            //{
-            //    ZeldaLog("먼저 특정 장소로 워프하십시오.");
-            //    ZeldaSelect();
-            //}
-
         }
 
         public void EffectByHeat()
@@ -332,71 +320,180 @@ namespace classDesign
         public enum ItemChoice { 줍기 = 1, 버리기 }
         public enum InvenChoice { 사용하기 = 1, 버리기 }
 
+        public enum SellChoice { 판다 = 1, 그만둔다 }
+        public enum BuyChoice { 산다 = 1, 그만둔다 }
+
         public int effect;
+        public int cost;
         public override void ZeldaSelect()
         {
+            //다른 곳에서 접근했을 때에도 동일한 메서드를 호출하게끔 하자. 내부에서 갈라지도록
             //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
             //ZeldaLogic(ZeldaInput());
+            switch (ZeldaManager.currentLink.state)
+            {
+                case Link.LinkState.Hunt:
+                    ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+                    break;
+                case Link.LinkState.Inventory:
+                    ZeldaChoice<InvenChoice>("행동을 선택하십시오.");
+                    break;
+                case Link.LinkState.Sell:
+                    ZeldaChoice<SellChoice>("행동을 선택하십시오.");
+                    break;
+                case Link.LinkState.Buy:
+                    ZeldaChoice<BuyChoice>("행동을 선택하십시오.");
+                    break;
+                default:
+                    break;
+            }
+            ZeldaLogic(ZeldaInput());
         }
         public void ItemSelect()
         {
             ZeldaChoice<InvenChoice>("행동을 선택하십시오.");
             ItemLogic(ZeldaInput());
         }
-        //이 로직은 마음에 들지 않는다. 추후수정필요
+        //이 로직은 마음에 들지 않는다. 추후수정필요 - 각각의 상태마다 다른 로직으로 흘러가게 디자인
+        //currentlink의 state를 바꾸는 방식? 사냥, 인벤토리, 상점 살 때, 팔 때
         public override void ZeldaLogic(string input)
         {
             try
             {
-                if (input=="b")
-                {
-                    throw new Exception("bItemException");
-                }
-
                 ZeldaThrow(input);
-
-                switch (input)
+                switch (ZeldaManager.currentLink.state)
                 {
-                    case "1":
-
-                        ZeldaLog("아이템 획득 : "+ this.GetType().Name);
-
-                        //switch (type)
-                        //{
-                        //    case Type.Weapon:
-                        //        ZeldaManager.currentLink.weaponList.Add(this);
-                        //        break;
-                        //    case Type.Shield:
-                        //        ZeldaManager.currentLink.shieldList.Add(this);
-                        //        break;
-                        //    case Type.Clothes:
-                        //        break;
-                        //    case Type.Material:
-                        //        ZeldaManager.currentLink.materialList.Add(this);
-                        //        break;
-                        //    case Type.food:
-                        //        ZeldaManager.currentLink.foodList.Add(this);
-                        //        break;
-                        //    default:
-                        //        break;
-                        //}
-
-                        ZeldaManager.currentLink.itemList.Add(this);
-
+                    case Link.LinkState.Hunt:
+                        switch (input)
+                        {
+                            case "1":
+                                ZeldaLog("아이템 획득 : " + this.GetType().Name);
+                                ZeldaManager.currentLink.itemList.Add(this);
+                                break;
+                            case "2":
+                                ZeldaLog("아이템을 버렸다");
+                                break;
+                        }
                         break;
-                    case "2":
-                        ZeldaLog("아이템을 버렸다");
+                    case Link.LinkState.Inventory:
+                        switch (input)
+                        {
+                            case "1":
+                                ItemEffect();
+                                //극혐방법. 생각했던것보다 로직이 너무 복잡해져서 뒤로가기 기능이
+                                //어려워짐.
+
+                                ZeldaManager.currentLink.itemList.Remove(this);
+                                break;
+                            case "2":
+                                ZeldaManager.currentLink.itemList.Remove(this);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Link.LinkState.Sell:
+                        switch (input)
+                        {
+                            case "1":
+                                ZeldaManager.currentLink.gold += this.cost;
+                                ZeldaLog($"{this.GetType().ToString()}을/를 팔아서 {this.cost} 골드를 얻었습니다.");
+                                ZeldaManager.currentLink.itemList.Remove(this);
+                                break;
+                            case "2":
+
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Link.LinkState.Buy:
+                        switch (input)
+                        {
+                            case "1":
+                                ZeldaManager.currentLink.gold -= this.cost;
+                                ZeldaLog($"{this.cost} 골드로 {this.GetType()} 을/를 구입했습니다.");
+                                ZeldaManager.currentLink.itemList.Add(this);
+                                break;
+                            case "2":
+
+                                break;
+                            default:
+                                break;
+                        }
                         break;
                     default:
                         break;
                 }
             }
-
             catch (Exception ex)
             {
                 ZeldaCatch(ex);
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
+            //finally
+            //{
+            //    ZeldaManager.currentZelda.ZeldaSelect();
+            //}
+
+            //finally
+            //{
+            //    ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+            //}
+
+
+            //    try
+            //    {
+            //        if (input=="b")
+            //        {
+            //            throw new Exception("bItemException");
+            //        }
+
+            //        ZeldaThrow(input);
+
+            //        switch (input)
+            //        {
+            //            case "1":
+
+            //                ZeldaLog("아이템 획득 : "+ this.GetType().Name);
+
+            //                //switch (type)
+            //                //{
+            //                //    case Type.Weapon:
+            //                //        ZeldaManager.currentLink.weaponList.Add(this);
+            //                //        break;
+            //                //    case Type.Shield:
+            //                //        ZeldaManager.currentLink.shieldList.Add(this);
+            //                //        break;
+            //                //    case Type.Clothes:
+            //                //        break;
+            //                //    case Type.Material:
+            //                //        ZeldaManager.currentLink.materialList.Add(this);
+            //                //        break;
+            //                //    case Type.food:
+            //                //        ZeldaManager.currentLink.foodList.Add(this);
+            //                //        break;
+            //                //    default:
+            //                //        break;
+            //                //}
+
+            //                ZeldaManager.currentLink.itemList.Add(this);
+
+            //                break;
+            //            case "2":
+            //                ZeldaLog("아이템을 버렸다");
+            //                break;
+            //            default:
+            //                break;
+            //        }
+            //    }
+
+            //    catch (Exception ex)
+            //    {
+            //        ZeldaCatch(ex);
+            //        ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+            //    }
+            //}
         }
         public virtual void ItemEffect()
         {
@@ -413,7 +510,7 @@ namespace classDesign
                     ZeldaManager.currentLink.def += effect;
                     break;
                 case Type.Material:
-                    ZeldaLog("소재는 가공되기 전까지 사용할 수 없습니다.");
+                    throw new Exception("UseMaterialException");
                     break;
                 default:
                     break;
@@ -498,8 +595,7 @@ namespace classDesign
                         ZeldaManager.CreateInstance<ZeldaCreature>(false);
                         break;
                     case "2":
-                        ZeldaLog("준비중");
-                        ZeldaSelect();
+                        ZeldaManager.CreateInstance<ZeldaShop>(false);
                         break;
                     case "3":
                         ZeldaLog("준비중");
@@ -515,63 +611,14 @@ namespace classDesign
             }
             finally
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
            
             
         }
-
-        //public override void ZeldaLogic(string input)
-        //{
-        //    //base.ZeldaLogic(input);
-        //    ZeldaException(input);
-
-        //    if (input == "1")
-        //    {
-        //        GrassLand grass = new GrassLand("\nGrassLand 클래스는 플레이어가 선택할 수 있는 Region 중 하나로, 다른 지역과 비교해 상대적으로 평화롭다.\n몬스터 및 동물들과 조우할 시 사냥하여 아이템을 얻을 수 있다.\n상인과 만날 시 고급 아이템 매입을 하거나 소지한 아이템을 판매할 수 있다.\n여관을 발견한다면 묵을 수도 있다.");
-        //    }
-        //    if (input == "2")
-        //    {
-        //        Desert desert = new Desert("\nDesert 클래스는 플레이어가 선택할 수 있는 Region 중 하나로, 다른 지역과 비교해 상대적으로 평화롭다.\n몬스터 및 동물들과 조우할 시 사냥하여 아이템을 얻을 수 있다.\n상인과 만날 시 고급 아이템 매입을 하거나 소지한 아이템을 판매할 수 있다.\n여관을 발견한다면 묵을 수도 있다.");
-        //    }
-        //    if (input == "3")
-        //    {
-        //        SnowField snow = new SnowField("\nSnowField 클래스는 플레이어가 선택할 수 있는 Region 중 하나로, 다른 지역과 비교해 상대적으로 평화롭다.\n몬스터 및 동물들과 조우할 시 사냥하여 아이템을 얻을 수 있다.\n상인과 만날 시 고급 아이템 매입을 하거나 소지한 아이템을 판매할 수 있다.\n여관을 발견한다면 묵을 수도 있다.");
-        //    }
-        //    if (input == "4")
-        //    {
-        //        Volcano volcano = new Volcano("\nVolcano 클래스는 플레이어가 선택할 수 있는 Region 중 하나로, 다른 지역과 비교해 상대적으로 평화롭다.\n몬스터 및 동물들과 조우할 시 사냥하여 아이템을 얻을 수 있다.\n상인과 만날 시 고급 아이템 매입을 하거나 소지한 아이템을 판매할 수 있다.\n여관을 발견한다면 묵을 수도 있다.");
-        //    }
-
-        //    //else if (input == "2" || input == "3" || input == "4")
-        //    //{
-        //    //    ZeldaLog("준비중입니다.");
-        //    //    ZeldaSelect();
-        //    //}
-
-        //}
-
-
-        //void SetChoice()
-        //{
-        //    string text = "워프할 지역을 선택하십시오.";
-
-        //    for (int i = 1; i < Enum.GetValues(typeof(Region)).Length + 1; i++)
-        //    {
-        //        text += "\n" + (i) + "." + " " + (Region)i;
-        //    }
-
-        //    ZeldaLog(text);
-        //}
     }
 
-    //class GrassLand : ZeldaRegion
-    //{
-    //    public GrassLand(string explain)
-    //    {
-    //        ZeldaLog(explain);
-    //    }
-    //}
+    
     class ZeldaInventory : Zelda
     {
         public ZeldaInventory()
@@ -605,12 +652,16 @@ namespace classDesign
             {
                 ZeldaThrow(input);
                 //링크 안에서부터 분류를 하는게 맞나? 링크는 획득할때마다 리스트에 넣어주기만 하고 인벤토리에서 분류작업을 실시하는것이 어떨까?
-                itemList[int.Parse(input)-1].ItemSelect();
+                itemList[int.Parse(input)-1].ZeldaSelect();
 
             }
             catch (Exception ex)
             {
                 ZeldaCatch(ex);
+                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+            }
+            finally
+            {
                 ZeldaManager.GetZeldas.Peek().ZeldaSelect();
             }
         }
@@ -619,10 +670,86 @@ namespace classDesign
 
     }
 
-    class ZeldaBuilding
+    class ZeldaShop : Zelda
     {
+        public ZeldaShop(string explain) 
+        {
+            ZeldaLog(explain);
+        }
+        public enum ShopChoice { Sell = 1, Buy }
+        public enum GrassLandItems { Meat = 1 }
+        public enum VolcanoItems { Spear = 1 }
+        public enum SnowFieldItems { Horn = 1 }
+        public enum DesertItems { Teeth = 1 }
 
+        public List<ZeldaItem> GrassLandItemList;
+        public List<ZeldaItem> VocanoItemList = new List<ZeldaItem>();
+        public List<ZeldaItem> SnowFieldItemList = new List<ZeldaItem>();
+        public List<ZeldaItem> DesertItemList = new List<ZeldaItem>();
+        public override void ZeldaSelect()
+        {
+            ZeldaChoice<ShopChoice>("행동을 선택하십시오");
+            ZeldaLogic(ZeldaInput());
+        }
 
+        public override void ZeldaLogic(string input)
+        {
+            try
+            {
+                ZeldaThrow(input);
+                switch (input)
+                {
+                    case "1":
+                        ZeldaManager.currentLink.state = Link.LinkState.Sell;
+                        //기제작된 인벤토리 클래스 재사용하는거는 문제가 있음 그냥 아이템 리스티 전체 받아서 출력
+                        ZeldaChoice(ZeldaManager.currentLink.itemList, "아이템을 선택하십시오.");
+                        ZeldaLogic(ZeldaManager.currentLink.itemList, ZeldaInput());
+                        ZeldaManager.MoveTo<ZeldaShop>();
+                        //ZeldaManager.CreateInstance<ZeldaInventory>(false);
+                        
+                    break;
+                    case "2":
+                        ZeldaManager.currentLink.state = Link.LinkState.Buy;
+                        switch (ZeldaManager.currentRegion)
+                        {
+                            case GrassLand:
+                                ZeldaChoice<GrassLandItems>("아이템을 선택하십시오.");
+                                ZeldaLogic<GrassLandItems>(ZeldaInput());
+                            break;
+                            case Volcano:
+                                ZeldaChoice<VolcanoItems>("아이템을 선택하십시오.");
+                                ZeldaLogic<VolcanoItems>(ZeldaInput());
+                                break;
+                            case SnowField:
+                                ZeldaChoice<SnowFieldItems>("아이템을 선택하십시오.");
+                                ZeldaLogic<SnowFieldItems>(ZeldaInput());
+                                break;
+                            case Desert:
+                                ZeldaChoice<DesertItems>("아이템을 선택하십시오.");
+                                ZeldaLogic<DesertItems>(ZeldaInput());
+                                break;
+                                
+
+                            default:
+                                break;
+                        }
+                        ZeldaManager.MoveTo<ZeldaShop>();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                ZeldaCatch(ex);
+                
+            }
+            finally 
+            {
+                ZeldaManager.currentZelda.ZeldaSelect();
+            }
+        }
 
     }
 

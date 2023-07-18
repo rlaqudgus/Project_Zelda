@@ -192,7 +192,7 @@
             }
             finally 
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
        

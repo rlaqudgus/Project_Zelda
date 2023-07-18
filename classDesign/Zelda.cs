@@ -112,7 +112,36 @@
             }
             finally
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
+            }
+        }
+
+        public void ZeldaLogic(List<ZeldaItem> zelda, string input)
+        {
+            try
+            {
+                ZeldaThrow(input);
+                //ZeldaManager.CreateByEnum(input, type);
+                ZeldaManager.CreateByList(zelda, input);
+                
+            }
+            catch (Exception ex)
+            {
+                ZeldaCatch(ex);
+            }
+            finally
+            {
+                //Tlqkf 이건 좀 아니지않나?
+
+                if (this is ZeldaShop)
+                {
+                    ZeldaManager.MoveTo<ZeldaShop>();
+                }
+                if (this is ZeldaInventory)
+                {
+                    ZeldaManager.MoveTo<ZeldaInventory>();
+                }
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
        
@@ -137,7 +166,7 @@
                 //ZeldaSelect();
             }
             
-            if (input == "종료")
+            if (input == "종료" || input == "exit")
             {
                 throw new Exception("GameOver");
             }
@@ -150,10 +179,17 @@
             {
                 throw new Exception("zException");
             }
+
+            if (input == "l")
+            {
+                throw new Exception("lException");
+            }
+
             if (!int.TryParse(input, out int result))
             {
                 throw new Exception("IntegerException");
             }
+           
         }
 
         public void ZeldaCatch(Exception ex)
@@ -165,9 +201,11 @@
                     //ZeldaSelect();
                     ZeldaLog("명령어를 입력하지 않았습니다.");
                     break;
+
                 case "GameOver":
                     ZeldaOver();
                     break;
+
                 case "bException":
                     
                     try
@@ -185,6 +223,7 @@
                         //ZeldaSelect();
                     }
                     break;
+
                 case "zException":
                     ZeldaLog(ZeldaManager.GetZeldas.Count.ToString());
 
@@ -222,11 +261,33 @@
                     }
                     //ZeldaSelect();
                     break;
+
                 case "bItemException":
                     ZeldaLog("아이템 습득 창에서는 뒤로 갈 수 없습니다. 먼저 행동을 선택하십시오.");
                     break;
+
                 case "integerException":
                     ZeldaLog("잘못된 명령어입니다. 보기 중의 숫자를 입력하십시오.");
+                    break;
+
+                case "lException":
+                    try
+                    {
+                        if (ZeldaManager.currentLink==null)
+                        {
+                            throw new Exception();
+                        }
+                        ZeldaManager.currentZelda = ZeldaManager.currentLink;
+                    }
+                    catch
+                    {
+                        ZeldaLog("링크를 참조할 수 없습니다. 주인공을 생성하기 전인지 확인하십시오.");
+
+                    }
+                    
+                    break;
+                case "UseMaterialException":
+                    ZeldaLog("소재는 가공되기 전까지 사용할 수 없습니다.");
                     break;
                 default:
                     break;

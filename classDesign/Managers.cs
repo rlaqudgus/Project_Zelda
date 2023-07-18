@@ -1,4 +1,6 @@
-﻿namespace classDesign
+﻿using System.ComponentModel;
+
+namespace classDesign
 {
     static class ZeldaManager
     {
@@ -7,6 +9,8 @@
         static public ZeldaCreature currentTarget;
         //static public List<Zelda> GetZeldas = new List<Zelda>();
         static public Stack<Zelda> GetZeldas = new Stack<Zelda>();
+        static public Zelda currentZelda;
+        static public Zelda currentState;
         //static public Stack<Object> GetZeldaObjects = new Stack<Object>();
         static public void LinkStat()
         {
@@ -28,6 +32,7 @@
         static public void MoveBack()
         {
             GetZeldas.Pop();
+            currentZelda = GetZeldas.Peek();
         }
         static public void MoveBack(int loop)
         {
@@ -35,6 +40,7 @@
             {
                 GetZeldas.Pop();
             }
+            currentZelda = GetZeldas.Peek();
         }
         static public void MoveTo<T>() where T : Zelda
         {
@@ -42,6 +48,7 @@
             {
                 GetZeldas.Pop();
             }
+            currentZelda = GetZeldas.Peek();
         }
 
         //인스턴스를 생성하는 부분과 생성한 놈의 로직을 호출하는 부분의 분리가 필요해보임 
@@ -99,7 +106,7 @@
         //enum값에 따라 미리 만들어져있는 클래스의 인스턴스를 자동으로 생성,
         //분기에 따라 하나하나 인스턴스화 시키지 않아도 된다.
         //매니저에 정보 저장
-        //Region, Animal, Monster, item 목록에 유용하게 쓰일듯하다 
+        //Region, Animal, Monster, item 목록에 유용하게 쓰일듯하다(미리 정해쟈 있는 목록이라면 enum으로 가능)
         static public void CreateByEnum(string input, Type enumType)
         {
             if (int.Parse(input)>Enum.GetValues(enumType).Length || int.Parse(input) <=0 )
@@ -128,8 +135,6 @@
 
                     //생성한 놈을 stack에 푸쉬
 
-                    //GetZeldas.Push(instance);
-
                     //타입에 따라 매니저가 알아야 할 것들 저장하는 로직
 
                     SwitchCurrentState(instance);
@@ -144,12 +149,53 @@
             }
         }
 
+        //미리 정해져 있지 않고 계속 바뀌는 리스트의 경우(인벤토리 아이템은 계속 바뀐다) 비슷한 놈으로 다시 만들어주자 새로 만들어줄 필요는 없는데?
+        static public void CreateByList(List<ZeldaItem> items, string input)
+        {
+            if (int.Parse(input) > items.Count || int.Parse(input) <= 0)
+            {
+                throw new Exception("WrongNumberException : 입력 불가능한 숫자입니다.");
+            }
+
+                    //아이템의 이름을 가져와서 어셈블리에 저장되어있는 이름으로 해당 클래스를
+                    //찾아 type 변수에 저장
+                    ZeldaItem currentItem = items[int.Parse(input) - 1];
+
+                    //Type type = Type.GetType(currentItem.ToString());
+
+                    ////Activator로 생성하고
+                    ////*생성할때 생성자에 로직이 포함되어있기 때문에 밑의 코드는 돌지 않는다.
+                    ////로직이 끝나야 비로소 밑으로 간다. 따라서 생성자에 input을 포함한 로직은 제거하는것이 맞다.
+                    ////(제거 완료)
+
+                    //Zelda instance = (Zelda)Activator.CreateInstance(type, "New Class " + type.Name + " has been instantiated");
+
+
+                    ////생성한 놈을 stack에 푸쉬
+
+                    ////타입에 따라 매니저가 알아야 할 것들 저장하는 로직
+
+                    //SwitchCurrentState(instance);
+
+            
+                currentItem.ZeldaSelect();
+            
+
+            //로직을 실행할 함수 호출.. zeldaselect
+
+            //GetZeldas.Peek().ZeldaSelect();
+
+        }
+
         static void SwitchCurrentState(Zelda instance)
         {
+            currentZelda = instance;
+
             //아이템도 푸쉬해줘햐는가? 굳이? 푸쉬해주지 말고 로직 끝나면 특정 분기로 가게끔 코드를 짜면 해결될듯?
             if (!instance.GetType().IsSubclassOf(typeof(ZeldaItem)))
             {
                 GetZeldas.Push(instance);
+                //currentZelda = instance;
             }
 
             if (instance is Link)
@@ -163,6 +209,14 @@
             if (instance.GetType().IsSubclassOf(typeof(Animal)) || instance.GetType().IsSubclassOf(typeof(Monster)))
             {
                 currentTarget = (ZeldaCreature)instance;
+            }
+            if (instance is ZeldaInventory)
+            {
+                currentLink.state = Link.LinkState.Inventory;
+            }
+            if (instance is ZeldaCreature)
+            {
+                currentLink.state = Link.LinkState.Hunt;
             }
         }
         static void SwitchCurrentState(Type type, Zelda instance)
