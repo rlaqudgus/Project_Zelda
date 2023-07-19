@@ -1,7 +1,4 @@
-﻿
-using static classDesign.ZeldaCreature;
-
-namespace classDesign
+﻿namespace classDesign
 {
     class ZeldaLauncher : Zelda
     {
@@ -58,27 +55,9 @@ namespace classDesign
             }
             finally
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
-            //if (input == "1")
-            //{
-            //    ZeldaLog("링크 생성");
-            //    //Link link = new Link("Link 클래스는 주인공의 정보와 기능을 정의하고 있다. 플레이어가 새 게임을 플레이할 시 생성된다.");
-            //    ZeldaManager.CreateInstance<Link>(input);
-            //}
-
-            //else if (input == "2")
-            //{
-                
-            //}
-
-            ////else ZeldaSelect();
-
-
         }
-
-
-
     }
 
     //주인공 클래스 게임시작 시 클래스 생성, 게임 과정 중 업데이트되어야함
@@ -91,17 +70,15 @@ namespace classDesign
         };
 
         public List<ZeldaItem> itemList = new List<ZeldaItem>();
-        //public List<ZeldaItem> materialList = new List<ZeldaItem>();
-        //public List<ZeldaItem> weaponList = new List<ZeldaItem>();
-        //public List<ZeldaItem> shieldList = new List<ZeldaItem>();
-        //public List<ZeldaItem> foodList = new List<ZeldaItem>();
-        //public List<ZeldaItem> clothesList = new List<ZeldaItem>();
-        public enum LinkFunction { Warp = 1, Hunt, MarketPlace, Motel, Inven }
+        public enum LinkFunction { Warp = 1, Inven }
         public enum LinkState { Alive, Dead , Hunt, Inventory, Sell, Buy }
+        public enum LinkDied { 재도전 = 1, 그만두기 }
+
         public LinkState state;
 
         public string name;
         public int hp;
+        public int maxHp;
         public int gold;
         public float stamina;
         public int atk;
@@ -119,6 +96,7 @@ namespace classDesign
             //ZeldaManager.GetZeldas.Push(this);
             ZeldaLog(explain);
             name = "Link";
+            maxHp = 4;
             hp = 4;
             gold = 0;
             stamina = 1;
@@ -171,8 +149,37 @@ namespace classDesign
 
             ZeldaLog(creature + "의 현재 체력 : " + creature.currentHp);
             ZeldaLog("현재 체력 : " + hp);
+
+            if (hp <=0 ) 
+            {
+                Die();
+            }
         }
 
+        public void SellItem(ZeldaItem item)
+        {
+            ZeldaManager.currentLink.gold += item.cost;
+            ZeldaLog($"{item.GetType().ToString()}을/를 팔아서 {item.cost} 골드를 얻었습니다.");
+            ZeldaManager.currentLink.itemList.Remove(item);
+        }
+
+        public void BuyItem(ZeldaItem item)
+        {
+            if (gold < item.cost)
+            {
+                ZeldaLog("돈이 부족합니다.");
+                return;
+            }
+            ZeldaManager.currentLink.gold -= item.cost;
+            ZeldaLog($"{item.cost} 골드로 {item.GetType()} 을/를 구입했습니다.");
+            ZeldaManager.currentLink.itemList.Add(item);
+        }
+
+        public void Die()
+        {
+            ZeldaChoice<LinkDied>("당신은 죽었습니다! 게임을 계속하시겠습니까?");
+            DeathLogic(ZeldaInput());
+        }
         public void UseItem(ZeldaItem item)
         {
 
@@ -185,29 +192,53 @@ namespace classDesign
             ZeldaLogic(ZeldaInput());
         }
 
+        public void DeathLogic(string input)
+        {
+            //죽었을 때는 무조건 1,2만 선택할 수 있게 하자
+            //try
+            //{
+                
+                switch (input)
+                {
+                    case "1":
+                        ZeldaManager.MoveTo<ZeldaLauncher>();
+                        break;
+                    case "2":
+                        ZeldaOver();
+                        break;
+                    default:
+                        ZeldaLog("먼저 게임 진행 여부를 선택해주십시오.");
+                        Die();
+                        break;
+                }
+            //}
+            //catch (Exception ex)
+            //{
+            //    ZeldaCatch(ex);
+
+            //}
+            //finally
+            //{
+            //    ZeldaManager.currentZelda.ZeldaSelect();
+            //}
+        }
         public override void ZeldaLogic(string input)
         {
-            //base.ZeldaLogic(input);
-            //ZeldaException(input);
-
             try
             {
                 ZeldaThrow(input);
                 switch (input)
                 {
                     case "1":
-                        //Type type = logicDictionary[int.Parse(input)];
-                        //ZeldaManager.CreateInstance<>(false);
                         ZeldaManager.CreateInstance<ZeldaRegion>(false);
                         break;
-                    case "5":
+                    case "2":
                         ZeldaManager.CreateInstance<ZeldaInventory>(false);
                         break;
                     default:
                         ZeldaLog("먼저 특정 장소로 워프하십시오.");
                         break;
                 }
-                
             }
             catch (Exception ex)
             {
@@ -216,7 +247,7 @@ namespace classDesign
             }
             finally
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
 
         }
@@ -329,9 +360,6 @@ namespace classDesign
         public int cost;
         public override void ZeldaSelect()
         {
-            //다른 곳에서 접근했을 때에도 동일한 메서드를 호출하게끔 하자. 내부에서 갈라지도록
-            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-            //ZeldaLogic(ZeldaInput());
             switch (ZeldaManager.currentLink.state)
             {
                 case Link.LinkState.Hunt:
@@ -350,11 +378,6 @@ namespace classDesign
                     break;
             }
             ZeldaLogic(ZeldaInput());
-        }
-        public void ItemSelect()
-        {
-            ZeldaChoice<InvenChoice>("행동을 선택하십시오.");
-            ItemLogic(ZeldaInput());
         }
         //이 로직은 마음에 들지 않는다. 추후수정필요 - 각각의 상태마다 다른 로직으로 흘러가게 디자인
         //currentlink의 state를 바꾸는 방식? 사냥, 인벤토리, 상점 살 때, 팔 때
@@ -398,9 +421,10 @@ namespace classDesign
                         switch (input)
                         {
                             case "1":
-                                ZeldaManager.currentLink.gold += this.cost;
-                                ZeldaLog($"{this.GetType().ToString()}을/를 팔아서 {this.cost} 골드를 얻었습니다.");
-                                ZeldaManager.currentLink.itemList.Remove(this);
+                                //ZeldaManager.currentLink.gold += this.cost;
+                                //ZeldaLog($"{this.GetType().ToString()}을/를 팔아서 {this.cost} 골드를 얻었습니다.");
+                                //ZeldaManager.currentLink.itemList.Remove(this);
+                                ZeldaManager.currentLink.SellItem(this);
                                 break;
                             case "2":
 
@@ -413,9 +437,10 @@ namespace classDesign
                         switch (input)
                         {
                             case "1":
-                                ZeldaManager.currentLink.gold -= this.cost;
-                                ZeldaLog($"{this.cost} 골드로 {this.GetType()} 을/를 구입했습니다.");
-                                ZeldaManager.currentLink.itemList.Add(this);
+                                //ZeldaManager.currentLink.gold -= this.cost;
+                                //ZeldaLog($"{this.cost} 골드로 {this.GetType()} 을/를 구입했습니다.");
+                                //ZeldaManager.currentLink.itemList.Add(this);
+                                ZeldaManager.currentLink.BuyItem(this);
                                 break;
                             case "2":
 
@@ -433,69 +458,6 @@ namespace classDesign
                 ZeldaCatch(ex);
                 ZeldaManager.currentZelda.ZeldaSelect();
             }
-            //finally
-            //{
-            //    ZeldaManager.currentZelda.ZeldaSelect();
-            //}
-
-            //finally
-            //{
-            //    ZeldaManager.GetZeldas.Peek().ZeldaSelect();
-            //}
-
-
-            //    try
-            //    {
-            //        if (input=="b")
-            //        {
-            //            throw new Exception("bItemException");
-            //        }
-
-            //        ZeldaThrow(input);
-
-            //        switch (input)
-            //        {
-            //            case "1":
-
-            //                ZeldaLog("아이템 획득 : "+ this.GetType().Name);
-
-            //                //switch (type)
-            //                //{
-            //                //    case Type.Weapon:
-            //                //        ZeldaManager.currentLink.weaponList.Add(this);
-            //                //        break;
-            //                //    case Type.Shield:
-            //                //        ZeldaManager.currentLink.shieldList.Add(this);
-            //                //        break;
-            //                //    case Type.Clothes:
-            //                //        break;
-            //                //    case Type.Material:
-            //                //        ZeldaManager.currentLink.materialList.Add(this);
-            //                //        break;
-            //                //    case Type.food:
-            //                //        ZeldaManager.currentLink.foodList.Add(this);
-            //                //        break;
-            //                //    default:
-            //                //        break;
-            //                //}
-
-            //                ZeldaManager.currentLink.itemList.Add(this);
-
-            //                break;
-            //            case "2":
-            //                ZeldaLog("아이템을 버렸다");
-            //                break;
-            //            default:
-            //                break;
-            //        }
-            //    }
-
-            //    catch (Exception ex)
-            //    {
-            //        ZeldaCatch(ex);
-            //        ZeldaManager.GetZeldas.Peek().ZeldaSelect();
-            //    }
-            //}
         }
         public virtual void ItemEffect()
         {
@@ -513,44 +475,8 @@ namespace classDesign
                     break;
                 case Type.Material:
                     throw new Exception("UseMaterialException");
-                    break;
                 default:
                     break;
-            }
-        }
-        
-        //인벤토리에서 아이템에 접근했을 때는 다른 로직이 필요하다..쫌 별론데 어쩔수없음
-        public void ItemLogic(string input)
-        {
-            //사용,버리기 그리고 뒤로가기 분기
-            try
-            {
-                ZeldaThrow(input);
-
-                switch (input)
-                {
-                    case "1":
-                        ItemEffect();
-                        //극혐방법. 생각했던것보다 로직이 너무 복잡해져서 뒤로가기 기능이
-                        //어려워짐.
-                        
-                        ZeldaManager.currentLink.itemList.Remove(this);
-                        break;
-                    case "2":
-                        ZeldaManager.currentLink.itemList.Remove(this);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                
-                ZeldaCatch(ex);
-            }
-            finally
-            {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
             }
         }
     }
@@ -568,26 +494,17 @@ namespace classDesign
 
         public ZeldaRegion(string text)
         {
-            //ZeldaManager.GetZeldas.Push(this);
             ZeldaLog(text);
-            //ZeldaSelect();
-            //ZeldaLogic();
-
         }
 
         public override void ZeldaSelect()
         {
-            //eldaManager.GetZeldas.Add(this);
-            //ZeldaManager.currentGame = this;
             ZeldaChoice<Region>("워프할 지역을 선택하십시오.");
-            //string input = ZeldaInput();
             ZeldaLogic<Region>(ZeldaInput());
         }
 
         public override void ZeldaLogic(string input)
         {
-            //ZeldaException(input);
-
             try
             {
                 ZeldaThrow(input);
@@ -614,8 +531,6 @@ namespace classDesign
             {
                 ZeldaManager.currentZelda.ZeldaSelect();
             }
-           
-            
         }
     }
 
@@ -653,22 +568,19 @@ namespace classDesign
             {
                 ZeldaThrow(input);
                 //링크 안에서부터 분류를 하는게 맞나? 링크는 획득할때마다 리스트에 넣어주기만 하고 인벤토리에서 분류작업을 실시하는것이 어떨까?
-                itemList[int.Parse(input)-1].ZeldaSelect();
+                ZeldaManager.currentZelda = itemList[int.Parse(input)-1];
 
             }
             catch (Exception ex)
             {
                 ZeldaCatch(ex);
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                //ZeldaManager.GetZeldas.Peek().ZeldaSelect();
             }
             finally
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
-
-
-
     }
 
     class ZeldaShop : Zelda
@@ -676,6 +588,7 @@ namespace classDesign
         public ZeldaShop(string explain) 
         {
             ZeldaLog(explain);
+            SetShopItems();
         }
         public enum ShopChoice { Sell = 1, Buy }
         public enum GrassLandItems { Meat = 1 }
@@ -683,7 +596,7 @@ namespace classDesign
         public enum SnowFieldItems { Horn = 1 }
         public enum DesertItems { Teeth = 1 }
 
-        public List<ZeldaItem> GrassLandItemList;
+        public List<ZeldaItem> GrassLandItemList = new List<ZeldaItem>();
         public List<ZeldaItem> VocanoItemList = new List<ZeldaItem>();
         public List<ZeldaItem> SnowFieldItemList = new List<ZeldaItem>();
         public List<ZeldaItem> DesertItemList = new List<ZeldaItem>();
@@ -697,6 +610,7 @@ namespace classDesign
         {
             try
             {
+                
                 ZeldaThrow(input);
                 switch (input)
                 {
@@ -714,8 +628,9 @@ namespace classDesign
                         switch (ZeldaManager.currentRegion)
                         {
                             case GrassLand:
-                                ZeldaChoice<GrassLandItems>("아이템을 선택하십시오.");
-                                ZeldaLogic<GrassLandItems>(ZeldaInput());
+                                //ZeldaChoice<GrassLandItems>("아이템을 선택하십시오.");
+                                ZeldaChoice(GrassLandItemList,"아이템을 선택하십시오.");
+                                ZeldaLogic(GrassLandItemList, ZeldaInput());
                             break;
                             case Volcano:
                                 ZeldaChoice<VolcanoItems>("아이템을 선택하십시오.");
@@ -752,6 +667,18 @@ namespace classDesign
             }
         }
 
+        void SetShopItems()
+        {
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<Meat>());
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<FishMeat>());
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<ChuchuJelly>());
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<Horn>());
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<Teeth>());
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<Sword>());
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<Shield>());
+            GrassLandItemList.Add((ZeldaItem)ZeldaManager.CreateInstance<Spear>());
+        }
+
     }
 
     class ZeldaMotel : Zelda
@@ -775,15 +702,14 @@ namespace classDesign
 
         public override void ZeldaLogic(string input)
         {
-            int MaxHP = 4;
             try
             {
                 ZeldaThrow(input);
                 switch (input)
                 {
                     case "1":
-                        ZeldaLog($"체력이 {MaxHP} 회복되었습니다.");
-                        ZeldaManager.currentLink.hp = MaxHP; //Max HP를 설정해 둘 것
+                        ZeldaLog($"체력이 {ZeldaManager.currentLink.maxHp - ZeldaManager.currentLink.hp} 회복되었습니다.");
+                        ZeldaManager.currentLink.hp = ZeldaManager.currentLink.maxHp; //Max HP를 설정해 둘 것
                         break;
 
                     case "2":

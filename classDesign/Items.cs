@@ -7,21 +7,31 @@ namespace classDesign
         // 인스턴스 생성 시 매개변수로 미리 정보 넣는 방식 채택하는게 좋을듯. 현재 방식은 클래스 생성자 내에서 타입, 능력, 이펙트까지 다 결정
         // 이렇게 하면 같은 아이템이지만 능력이 조금만 달라지는 경우 또 새로운 클래스를 만들어줘야함. 타입, 능력, 이펙트 생성시
         // 미리 넣어주기
+        // 기본생성자 얘는 디폴트로 만들때 불러오기(상점에서 살때 등등?)
+        public Meat()
+        {
+            type = Type.food;
+            ability = Ability.Normal;
+            effect = 1;
+            cost = 15;
+        }
         public Meat(string explain)
         {
             type = Type.food;
             ability = Ability.Normal;
             effect = 1;
-            cost = 10;
+            cost = 15;
             ZeldaLog(explain);
         }
 
-        public Meat(Type type, Ability ability, int effect)
+        //아이템은 대부분 이렇게 타입과 능력, 이펙트양을 정해서 생성하도록 한다.(사냥터에서 사냥감이 죽었을 때 드랍)
+        public Meat(Type type, Ability ability, int effect, int cost)
         {
             ZeldaLog("고기 아이템 생성");
             this.type = type; 
             this.ability = ability;
             this.effect = effect;
+            this.cost = cost;
         }
         //아이템이 생성되었을 때는 일단 주워야 하는 건 맞음 줍기 or 버리기
         //그렇다면 인벤에서 접근했을때는?
@@ -32,33 +42,83 @@ namespace classDesign
             base.ZeldaSelect();
         }
 
-        //public override void ItemSelect()
-        //{
-        //    ZeldaChoice<InvenChoice>("행동을 선택하십시오.");
-        //    ItemLogic(ZeldaInput());
-        //}
         public override void ItemEffect()
         {
             ZeldaLog("링크를 " + effect + " 만큼 회복시켰다.");
             base.ItemEffect();
             //ZeldaManager.currentLink.hp += hpEffect;
         }
+    }
+    class FishMeat : ZeldaItem
+    {
+        public FishMeat()
+        {
+            type = Type.food;
+            ability = Ability.Normal;
+            effect = 1;
+            cost = 15;
+        }
 
+        public FishMeat(string explain)
+        {
+            type = Type.food;
+            ability = Ability.Normal;
+            effect = 1;
+            cost = 15;
+            ZeldaLog(explain);
+        }
+
+        //아이템은 대부분 이렇게 타입과 능력, 이펙트양을 정해서 생성하도록 한다.(사냥터에서 사냥감이 죽었을 때 드랍)
+        public FishMeat(Type type, Ability ability, int effect, int cost)
+        {
+            ZeldaLog("물고기 아이템 생성");
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        //아이템이 생성되었을 때는 일단 주워야 하는 건 맞음 줍기 or 버리기
+        //그렇다면 인벤에서 접근했을때는?
+        public override void ZeldaSelect()
+        {
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
+        }
+
+        public override void ItemEffect()
+        {
+            ZeldaLog("링크를 " + effect + " 만큼 회복시켰다.");
+            base.ItemEffect();
+            //ZeldaManager.currentLink.hp += hpEffect;
+        }
     }
 
     class Spear : ZeldaItem
     {
-        public Spear(string explain)
+        public Spear()
         {
-            ZeldaLog(explain);
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            effect = 3;
             cost = 100;
         }
-        public Spear(Type type, Ability ability, int effect)
+
+        public Spear(string explain)
+        {
+            type = Type.Weapon;
+            ability=Ability.Normal; 
+            effect = 3;
+            cost = 100;
+            ZeldaLog(explain);
+            
+        }
+        public Spear(Type type, Ability ability, int effect, int cost)
         {
             this.type = type;
             this.ability = ability;
             this.effect = effect;
-            cost = 100;
+            this.cost = cost;
         }
         public override void ZeldaSelect()
         {
@@ -67,14 +127,9 @@ namespace classDesign
             base.ZeldaSelect();
         }
 
-        //public override void ItemSelect()
-        //{
-        //    ZeldaChoice<InvenChoice>("행동을 선택하십시오.");
-        //    ItemLogic(ZeldaInput());
-        //}
         public override void ItemEffect()
         {
-            ZeldaLog("링크가 무기를 장착하여 공격력이 " + effect + " 만큼 상승했다.");
+            ZeldaLog($"링크가 {this.GetType().Name}을/를 장착하여 공격력이 {effect} 만큼 상승했다.");
             base.ItemEffect();
             //ZeldaManager.currentLink.hp += hpEffect;
         }
@@ -82,16 +137,92 @@ namespace classDesign
 
     class Sword : ZeldaItem
     {
-        
+        public Sword()
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            effect = 3;
+            cost = 100;
+        }
+
+        public Sword(string explain)
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            effect = 3;
+            cost = 100;
+            ZeldaLog(explain);
+        }
+        public Sword(Type type, Ability ability, int effect, int cost)
+        {
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        public override void ZeldaSelect()
+        {
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
+        }
+
+        public override void ItemEffect()
+        {
+            ZeldaLog($"링크가{this.GetType().Name}을/를 장착하여 공격력이 {effect} 만큼 상승했다.");
+            base.ItemEffect();
+            //ZeldaManager.currentLink.hp += hpEffect;
+        }
     }
 
     class Shield : ZeldaItem
     {
+        public Shield()
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            effect = 10;
+            cost = 100;
+        }
 
+        public Shield(string explain)
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            effect = 10;
+            cost = 100;
+            ZeldaLog(explain);
+
+        }
+        public Shield(Type type, Ability ability, int effect, int cost)
+        {
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        public override void ZeldaSelect()
+        {
+            base.ZeldaSelect();
+        }
+
+        public override void ItemEffect()
+        {
+            ZeldaLog($"링크가{this.GetType().Name}을/를 장착하여 방어력이 {effect} 만큼 상승했다.");
+            base.ItemEffect();
+            //ZeldaManager.currentLink.hp += hpEffect;
+        }
     }
 
     class Horn : ZeldaItem
     {
+        public Horn()
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            cost = 100;
+        }
+
         public Horn(string explain)
         {
             ZeldaLog(explain);
@@ -104,12 +235,19 @@ namespace classDesign
         {
             //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
             //base.ZeldaLogic(ZeldaInput());
-            base .ZeldaSelect();
+            base.ZeldaSelect();
         }
     }
 
     class Teeth : ZeldaItem
     {
+        public Teeth()
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            cost = 100;
+        }
+
         public Teeth(string explain)
         {
             ZeldaLog(explain);
@@ -120,8 +258,69 @@ namespace classDesign
 
         public override void ZeldaSelect()
         {
-            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
+        }
+    }
+
+    class KeeseEye : ZeldaItem
+    {
+        public KeeseEye()
+        {
+            type = Type.Material;
+            ability = Ability.Normal;
+            cost = 30;
+        }
+        public KeeseEye(Type type, Ability ability, int effect, int cost)
+        {
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        public override void ZeldaSelect()
+        {
+            base.ZeldaSelect();
+        }
+    }
+
+    class KeeseWing : ZeldaItem
+    {
+        public KeeseWing()
+        {
+            type = Type.Material;
+            ability = Ability.Normal;
+            cost = 10;
+        }
+        public KeeseWing(Type type, Ability ability, int effect, int cost)
+        {
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        public override void ZeldaSelect()
+        {
+            base.ZeldaSelect();
+        }
+    }
+
+    class ChuchuJelly : ZeldaItem
+    {
+        public ChuchuJelly()
+        {
+            type = Type.Material;
+            ability = Ability.Normal;
+            cost = 10;
+        }
+        public ChuchuJelly(Type type, Ability ability, int effect, int cost)
+        {
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        public override void ZeldaSelect()
+        {
             base.ZeldaSelect();
         }
     }

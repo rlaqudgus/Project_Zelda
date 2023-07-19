@@ -4,11 +4,7 @@
     {
         public GrassLand(string explain)
         {
-            //ZeldaManager.GetZeldas.Push(this);
-            //ZeldaManager.currentRegion = this;
             ZeldaLog(explain);
-            //ZeldaSelect();
-            //ZeldaManager.Game();
         }
 
         public override void ZeldaSelect()
@@ -19,70 +15,33 @@
             base.ZeldaLogic(ZeldaInput());
         }
 
-        //public override void ZeldaLogic(string input)
-        //{
-        //    //base.ZeldaLogic(input);
-        //    ZeldaException(input);
-
-        //    if (input == "1")
-        //    {
-        //        ZeldaManager.currentLink.Hunt();
-        //    }
-
-        //    if (input == "2")
-        //    {
-        //        ZeldaManager.currentLink.MarketPlace();
-        //    }
-
-        //    if (input == "3")
-        //    {
-        //        ZeldaManager.currentLink.Motel();
-        //    }
-
-
-        //}
-
-
     }
 
     class Desert : ZeldaRegion
     {
         public Desert(string explain)
         {
-            //ZeldaManager.GetZeldas.Push(this);
-            //ZeldaManager.currentRegion = this;
             ZeldaLog(explain);
-            //ZeldaSelect();
         }
 
         public override void ZeldaSelect()
         {
             ZeldaChoice<RegionFunction>("행동을 선택하십시오.");
             base.ZeldaLogic(ZeldaInput());
-            //ZeldaLogic(ZeldaInput(), DefaultLogic.Region);
         }
-
-        //public override void ZeldaLogic(string input)
-        //{
-        //    base.ZeldaLogic();
-        //}
     }
 
     class SnowField : ZeldaRegion
     {
         public SnowField(string explain)
         {
-            //ZeldaManager.GetZeldas.Push(this);
-            //ZeldaManager.currentRegion = this;
             ZeldaLog(explain);
-            //ZeldaSelect();
         }
 
         public override void ZeldaSelect()
         {
             ZeldaChoice<RegionFunction>("행동을 선택하십시오.");
             base.ZeldaLogic(ZeldaInput());
-            //ZeldaLogic(ZeldaInput(), DefaultLogic.Region);
         }
     }
 
@@ -108,9 +67,7 @@
     {
         public Animal()
         {
-            //ZeldaManager.GetZeldas.Push(this);
-            //ZeldaLog("Animal 클래스는 플레이어가 동물을 사냥할 시 생성되는 클래스이다. 지역에 따른 동물의 종류가 각각의 enum으로 정의되어 있다.");
-            //ZeldaSelect();
+
         }
         public Animal(string str)
         {
@@ -281,7 +238,7 @@
             }
             finally
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
         public void EffectByCold()

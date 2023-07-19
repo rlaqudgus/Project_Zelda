@@ -55,28 +55,29 @@
         {
             Type type = typeof(T);
 
-            
                 foreach (var item in Enum.GetValues(type))
                 {
                     text += "\n" + (int)item + "." + " " + item;
                 }
 
                 ZeldaLog(text);
-            
-
-            
-
-            
         }
 
         //인벤토리에 존재하는 아이템 설명 창 전용 UI
         public void ZeldaChoice(List<ZeldaItem> items, string text)
         {
+            if (items.Count==0)
+            {
+                ZeldaLog("아이템이 없습니다.");
+                return;
+            }
             for (int i = 0; i < items.Count; i++)
             {
                 text += "\n" + (i+1) + "." + " " + items[i].GetType().Name +
-                    " Type : " + items[i].type + "/" + " Ability : " + items[i].ability + "/" +
-                    " effect : " + items[i].effect;
+                    " Type : " + items[i].type + "/" + 
+                    " Ability : " + items[i].ability + "/" +
+                    " effect : " + items[i].effect + "/" +
+                    " cost : " + items[i].cost;
             }
             ZeldaLog(text);
         }
@@ -103,6 +104,10 @@
 
             try
             {
+                if (input=="b" && this is ZeldaShop)
+                {
+                    throw new Exception("bItemException");
+                }
                 ZeldaThrow(input);
                 ZeldaManager.CreateByEnum(input, type);
             }
@@ -120,9 +125,17 @@
         {
             try
             {
+                if (zelda.Count == 0 && input=="b")
+                {
+                    throw new Exception("InventorybException");
+                }
+                //if (input == "b")
+                //{
+                //    throw new Exception("bItemException");
+                //}
                 ZeldaThrow(input);
                 //ZeldaManager.CreateByEnum(input, type);
-                ZeldaManager.CreateByList(zelda, input);
+                ZeldaManager.CreateByItemList(zelda, input);
                 
             }
             catch (Exception ex)
@@ -131,16 +144,6 @@
             }
             finally
             {
-                //Tlqkf 이건 좀 아니지않나?
-
-                if (this is ZeldaShop)
-                {
-                    ZeldaManager.MoveTo<ZeldaShop>();
-                }
-                if (this is ZeldaInventory)
-                {
-                    ZeldaManager.MoveTo<ZeldaInventory>();
-                }
                 ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
@@ -150,7 +153,7 @@
         // ZeldaLogic의 매개변수로 쓰인다.
         public string ZeldaInput()
         {
-            ZeldaLog("명령어는 보기에 주어진 숫자 혹은 특정 문자열만 가능합니다.");
+            ZeldaLog("명령어는 보기에 주어진 숫자 혹은 특정 문자열만 가능합니다.\n허용되는 명령어 리스트를 확인하려면 \"c\" 를 입력하십시오.");
             ZeldaLog("명령어를 입력하십시오.");
 
             string input = Console.ReadLine();
@@ -160,6 +163,7 @@
 
         public void ZeldaThrow(string input)
         {
+            
             if (string.IsNullOrEmpty(input))
             {
                 throw new Exception("nullException");
@@ -175,7 +179,7 @@
                 throw new Exception("bException");
             }
 
-            if (input == "Z")
+            if (input == "z")
             {
                 throw new Exception("zException");
             }
@@ -183,6 +187,11 @@
             if (input == "l")
             {
                 throw new Exception("lException");
+            }
+
+            if(input == "c")
+            {
+                throw new Exception("cException");
             }
 
             if (!int.TryParse(input, out int result))
@@ -263,7 +272,7 @@
                     break;
 
                 case "bItemException":
-                    ZeldaLog("아이템 습득 창에서는 뒤로 갈 수 없습니다. 먼저 행동을 선택하십시오.");
+                    //ZeldaLog("아이템 습득 창에서는 뒤로 갈 수 없습니다. 먼저 행동을 선택하십시오.");
                     break;
 
                 case "integerException":
@@ -282,12 +291,16 @@
                     catch
                     {
                         ZeldaLog("링크를 참조할 수 없습니다. 주인공을 생성하기 전인지 확인하십시오.");
-
                     }
-                    
                     break;
                 case "UseMaterialException":
                     ZeldaLog("소재는 가공되기 전까지 사용할 수 없습니다.");
+                    break;
+                case "cException":
+                    ZeldaLog("\nb : 뒤로가기\nz : stack 확인 및 주인공 현재 상태 확인\nl : 빠른 워프 및 인벤토리 확인\nc : 명령어 확인\n종료 및 exit : 빠른 종료");
+                    break;
+                case "InventorybException":
+                    ZeldaManager.MoveBack();
                     break;
                 default:
                     break;

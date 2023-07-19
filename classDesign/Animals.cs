@@ -3,11 +3,6 @@
     // Fish, Horse, Wolf, Pigeon
     class Fox : Animal
     {
-        List<ZeldaItem> ObtainableItems = new List<ZeldaItem>();
-        //Meat meat;
-
-        
-        
         public Fox()
         {
 
@@ -43,7 +38,7 @@
 
         public override void DropItem()
         {
-            ZeldaManager.CreateInstance<Meat>(true, ZeldaItem.Type.food, ZeldaItem.Ability.Normal, 1);
+            ZeldaManager.CreateInstance<Meat>(true, ZeldaItem.Type.food, ZeldaItem.Ability.Normal, 1, 5);
         }
     }
 
@@ -78,7 +73,7 @@
 
         public override void DropItem()
         {
-            ZeldaManager.CreateInstance<Meat>(true, ZeldaItem.Type.food, ZeldaItem.Ability.Normal, 2);
+            ZeldaManager.CreateInstance<Meat>(true, ZeldaItem.Type.food, ZeldaItem.Ability.Normal, 2, 10);
         }
     }
 
@@ -113,7 +108,7 @@
 
         public override void DropItem()
         {
-            ZeldaManager.CreateInstance<Meat>(true, ZeldaItem.Type.food, ZeldaItem.Ability.Normal, 3);
+            ZeldaManager.CreateInstance<Meat>(true, ZeldaItem.Type.food, ZeldaItem.Ability.Normal, 3, 15);
         }
     }
 

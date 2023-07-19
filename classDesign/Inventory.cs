@@ -10,6 +10,7 @@
         public override void ZeldaSelect()
         {
             //UI
+            SetItem();
             ZeldaChoice(itemList, "아이템을 선택하십시오.");
             //base.ZeldaLogic(ZeldaInput());
             ZeldaLogic(itemList, ZeldaInput());
@@ -49,6 +50,7 @@
         public override void ZeldaSelect()
         {
             //UI
+            SetItem();
             ZeldaChoice(itemList, "아이템을 선택하십시오.");
             ZeldaLogic(itemList, ZeldaInput());
             //로직
@@ -67,6 +69,11 @@
                     itemList.Add(item);
                 }
             }
+
+            //if (itemList.Count==0)
+            //{
+            //    ZeldaLog("인벤토리가 비어 있습니다.");
+            //}
         }
     }
 
@@ -82,8 +89,10 @@
         public override void ZeldaSelect()
         {
             //UI
+            SetItem();
             ZeldaChoice(itemList, "아이템을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //base.ZeldaLogic(ZeldaInput());
+            ZeldaLogic(itemList, ZeldaInput());
             //로직
             //인풋에 따라 다른 인벤토리 아이템 분기가 나타나게
 
@@ -100,6 +109,11 @@
                     itemList.Add(item);
                 }
             }
+
+            //if (itemList.Count == 0)
+            //{
+            //    ZeldaLog("인벤토리가 비어 있습니다.");
+            //}
         }
     }
 
@@ -113,8 +127,10 @@
         public override void ZeldaSelect()
         {
             //UI
+            SetItem();
             ZeldaChoice(itemList, "아이템을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //base.ZeldaLogic(ZeldaInput());
+            ZeldaLogic(itemList, ZeldaInput());
             //로직
             //인풋에 따라 다른 인벤토리 아이템 분기가 나타나게
 
@@ -131,6 +147,11 @@
                     itemList.Add(item);
                 }
             }
+
+            //if (itemList.Count == 0)
+            //{
+            //    ZeldaLog("인벤토리가 비어 있습니다.");
+            //}
         }
     }
 
@@ -144,8 +165,10 @@
         public override void ZeldaSelect()
         {
             //UI
+            SetItem();
             ZeldaChoice(itemList, "아이템을 선택하십시오.");
-            base.ZeldaLogic(ZeldaInput());
+            //base.ZeldaLogic(ZeldaInput());
+            ZeldaLogic (itemList, ZeldaInput());
             //로직
             //인풋에 따라 다른 인벤토리 아이템 분기가 나타나게
 
@@ -162,6 +185,8 @@
                     itemList.Add(item);
                 }
             }
+
+           
         }
     }
 }

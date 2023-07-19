@@ -44,10 +44,19 @@ namespace classDesign
         }
         static public void MoveTo<T>() where T : Zelda
         {
+            //스택을 없애버리는게 좋은 방법인가?
             while (GetZeldas.Peek() is not T || GetZeldas.Peek().GetType().IsSubclassOf(typeof(T)))
             {
                 GetZeldas.Pop();
             }
+            //foreach (var item in GetZeldas.ToArray())
+            //{
+            //    if (item is T && !item.GetType().IsSubclassOf(typeof(T)))
+            //    {
+            //        currentZelda = item;
+            //        break;
+            //    }
+            //}
             currentZelda = GetZeldas.Peek();
         }
 
@@ -55,15 +64,13 @@ namespace classDesign
         //문제점 : b나 특수키 입력시 exception 거치고 다시 돌아감 못들어가게 막아야함 
        
         //input에 상관없이 무조건 객체를 생성하는 메서드. 밑에놈이랑 너무 똑같아서 추후 수정 예정
-        //일단 아이템 드랍 전용 메서드 push 하지 않고 생성한 그놈의 로직을 호출
-        static public void CreateInstance<T>()
+        //생성한 놈을 return해주는 놈
+        static public Zelda CreateInstance<T>()
         {
-            Zelda instance = (Zelda)Activator.CreateInstance(typeof(T), "New Class has been instantiated");
+            Zelda instance = (Zelda)Activator.CreateInstance(typeof(T));
             //GetZeldas.Push(instance);
 
-            SwitchCurrentState(instance);
-
-            instance.ZeldaSelect();
+            return instance;
         }
 
         //매개변수로 들어가는놈이 클래스에 대한 설명이었으면 좋겠음
@@ -74,7 +81,7 @@ namespace classDesign
         //생성하는 클래스가 어떤 놈인가? 에 따라 스택에 푸쉬할지 안할지,
         //매니저가 알고 있어야 할 정보 입력, 리스트 add 등의 로직 수행
         //현재 아이템이 생성될때는 로직이 좀 헐겁다.. 어쩔 수 없이 아이템만 불값 매개변수를 받아서 다른 처리를 해주자
-        static public void CreateInstance<T>(bool isInstant)
+        static public void CreateInstance<T>(bool isInstant/*, string explain*/)
         {
             Zelda instance = (Zelda)Activator.CreateInstance(typeof(T), "New Class " + typeof(T).Name + " has been instantiated");
             //GetZeldas.Push(instance);
@@ -88,9 +95,9 @@ namespace classDesign
 
             //GetZeldas.Peek().ZeldaSelect();
         }
-        static public void CreateInstance<T>(bool isItem, ZeldaItem.Type type, ZeldaItem.Ability ability, int effect)
+        static public void CreateInstance<T>(bool isItem, ZeldaItem.Type type, ZeldaItem.Ability ability, int effect, int cost)
         {
-            Zelda instance = (Zelda)Activator.CreateInstance(typeof(T), type, ability, effect);
+            Zelda instance = (Zelda)Activator.CreateInstance(typeof(T), type, ability, effect, cost);
             //GetZeldas.Push(instance);
 
             SwitchCurrentState(instance);
@@ -149,42 +156,18 @@ namespace classDesign
             }
         }
 
-        //미리 정해져 있지 않고 계속 바뀌는 리스트의 경우(인벤토리 아이템은 계속 바뀐다) 비슷한 놈으로 다시 만들어주자 새로 만들어줄 필요는 없는데?
-        static public void CreateByList(List<ZeldaItem> items, string input)
+        //미리 정해져 있지 않고 계속 바뀌는 리스트의 경우(인벤토리 아이템은 계속 바뀐다) 비슷한 놈으로 다시 만들어주자
+        //새로 만들어줄 필요는 없는데? 아이템 리스트에 접근해서 그놈의 로직만 실행시켜주면 된다
+        static public void CreateByItemList(List<ZeldaItem> items, string input)
         {
             if (int.Parse(input) > items.Count || int.Parse(input) <= 0)
             {
                 throw new Exception("WrongNumberException : 입력 불가능한 숫자입니다.");
             }
 
-                    //아이템의 이름을 가져와서 어셈블리에 저장되어있는 이름으로 해당 클래스를
-                    //찾아 type 변수에 저장
-                    ZeldaItem currentItem = items[int.Parse(input) - 1];
+            ZeldaItem currentItem = items[int.Parse(input) - 1];
 
-                    //Type type = Type.GetType(currentItem.ToString());
-
-                    ////Activator로 생성하고
-                    ////*생성할때 생성자에 로직이 포함되어있기 때문에 밑의 코드는 돌지 않는다.
-                    ////로직이 끝나야 비로소 밑으로 간다. 따라서 생성자에 input을 포함한 로직은 제거하는것이 맞다.
-                    ////(제거 완료)
-
-                    //Zelda instance = (Zelda)Activator.CreateInstance(type, "New Class " + type.Name + " has been instantiated");
-
-
-                    ////생성한 놈을 stack에 푸쉬
-
-                    ////타입에 따라 매니저가 알아야 할 것들 저장하는 로직
-
-                    //SwitchCurrentState(instance);
-
-            
-                currentItem.ZeldaSelect();
-            
-
-            //로직을 실행할 함수 호출.. zeldaselect
-
-            //GetZeldas.Peek().ZeldaSelect();
-
+            currentItem.ZeldaSelect();
         }
 
         static void SwitchCurrentState(Zelda instance)
