@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Newtonsoft.Json;
+using System.IO;
 
 namespace classDesign
 {
@@ -49,14 +50,6 @@ namespace classDesign
             {
                 GetZeldas.Pop();
             }
-            //foreach (var item in GetZeldas.ToArray())
-            //{
-            //    if (item is T && !item.GetType().IsSubclassOf(typeof(T)))
-            //    {
-            //        currentZelda = item;
-            //        break;
-            //    }
-            //}
             currentZelda = GetZeldas.Peek();
         }
 
@@ -98,6 +91,21 @@ namespace classDesign
         static public void CreateInstance<T>(bool isItem, ZeldaItem.Type type, ZeldaItem.Ability ability, int effect, int cost)
         {
             Zelda instance = (Zelda)Activator.CreateInstance(typeof(T), type, ability, effect, cost);
+            //GetZeldas.Push(instance);
+
+            SwitchCurrentState(instance);
+
+            if (isItem)
+            {
+                instance.ZeldaSelect();
+            }
+
+            //GetZeldas.Peek().ZeldaSelect();
+        }
+
+        static public void CreateInstance<T>(bool isItem, List<ZeldaItem> itemList, int maxHp, int hp, int gold, int def, int atk, float stamina)
+        {
+            Zelda instance = (Zelda)Activator.CreateInstance(typeof(T), itemList, maxHp, hp, gold, def, atk, stamina);
             //GetZeldas.Push(instance);
 
             SwitchCurrentState(instance);
@@ -214,6 +222,50 @@ namespace classDesign
                 currentTarget = (ZeldaCreature)instance;
             }
             
+        }
+    }
+
+    static class FileManager
+    {
+        static string path = "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\saveFile\\fileTest.txt";
+        static public void SaveFile()
+        {
+            File.WriteAllText(path, String.Empty);
+
+            string jsonString = JsonConvert.SerializeObject(ZeldaManager.currentLink, Formatting.Indented, new JsonSerializerSettings 
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+            });
+            Console.WriteLine(jsonString);
+
+            FileStream saveFile =  new FileStream(path, FileMode.OpenOrCreate);
+            
+            StreamWriter streamWriter = new StreamWriter(saveFile);
+
+            streamWriter.Write(jsonString);
+            
+            streamWriter.Close();
+            saveFile.Close();      
+        }
+
+        static public Link LoadFile() 
+        {
+            FileStream saveFile = new FileStream(path, FileMode.OpenOrCreate);
+
+            StreamReader streamReader = new StreamReader(saveFile);
+
+            string linkInfo = streamReader.ReadToEnd();
+
+            Link link = JsonConvert.DeserializeObject<Link>(linkInfo, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+
+            streamReader.Close();
+
+            saveFile.Close();
+
+            return link;
         }
     }
 

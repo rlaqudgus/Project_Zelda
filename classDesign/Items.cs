@@ -179,7 +179,7 @@ namespace classDesign
     {
         public Shield()
         {
-            type = Type.Weapon;
+            type = Type.Shield;
             ability = Ability.Normal;
             effect = 10;
             cost = 100;
@@ -187,7 +187,7 @@ namespace classDesign
 
         public Shield(string explain)
         {
-            type = Type.Weapon;
+            type = Type.Shield;
             ability = Ability.Normal;
             effect = 10;
             cost = 100;

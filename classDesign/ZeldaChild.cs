@@ -6,11 +6,13 @@
         {
 
         }
+
         public ZeldaLauncher(string explain)
         {
             ZeldaLog(explain);
             //ZeldaManager.GetZeldas.Push(this);
         }
+
         public enum Mode { New_Game = 1, Load_Game };
         public void StartGame()
         {
@@ -41,8 +43,14 @@
                         ZeldaManager.CreateInstance<Link>(false);
                         break;
                     case "2":
-                        ZeldaLog("준비중입니다.");
-                        ZeldaSelect();
+                        ZeldaManager.CreateInstance<Link>(false, 
+                            FileManager.LoadFile().itemList,
+                            FileManager.LoadFile().maxHp,
+                            FileManager.LoadFile().hp,
+                            FileManager.LoadFile().gold,
+                            FileManager.LoadFile().def,
+                            FileManager.LoadFile().atk,
+                            FileManager.LoadFile().stamina);
                         break;
                     default:
                         break;
@@ -63,14 +71,14 @@
     //주인공 클래스 게임시작 시 클래스 생성, 게임 과정 중 업데이트되어야함
     class Link : Zelda, IRegionEffect
     {
-        public Dictionary<int, Type> logicDictionary = new Dictionary<int, Type>()
-        {
-            { 1, typeof(ZeldaCreature)},
-            { 5, typeof(ZeldaInventory)},
-        };
+        //public Dictionary<int, Type> logicDictionary = new Dictionary<int, Type>()
+        //{
+        //    { 1, typeof(ZeldaCreature)},
+        //    { 5, typeof(ZeldaInventory)},
+        //};
 
         public List<ZeldaItem> itemList = new List<ZeldaItem>();
-        public enum LinkFunction { Warp = 1, Inven }
+        public enum LinkFunction { Warp = 1, Inven, Save }
         public enum LinkState { Alive, Dead , Hunt, Inventory, Sell, Buy }
         public enum LinkDied { 재도전 = 1, 그만두기 }
 
@@ -106,11 +114,14 @@
         }
 
         //저장된 스탯을 불러와서 생성할 때 쓰일 수 있는 생성자
-        public Link(string name, int hp, int gold, float stamina)
+        public Link(List<ZeldaItem> itemList, int maxHp, int hp, int gold, int def, int atk, float stamina)
         {
-            this.name = name;
+            this.itemList = itemList;
+            this.maxHp = maxHp;
             this.hp = hp;
             this.gold = gold;
+            this.def = def;
+            this.atk = atk;
             this.stamina = stamina;
         }
 
@@ -235,8 +246,10 @@
                     case "2":
                         ZeldaManager.CreateInstance<ZeldaInventory>(false);
                         break;
-                    default:
-                        ZeldaLog("먼저 특정 장소로 워프하십시오.");
+                    case "3":
+                        //dosth 저장하기
+                        FileManager.SaveFile();
+                        ZeldaLog("저장기능추가예정");
                         break;
                 }
             }

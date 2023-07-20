@@ -259,6 +259,7 @@
                         + " Hp - " + ZeldaManager.currentLink.hp
                         + " Stamina - " + ZeldaManager.currentLink.stamina
                         + " Gold - " + ZeldaManager.currentLink.gold
+                        + " atk - " + ZeldaManager.currentLink.atk
                         + " currentRegion - " + ZeldaManager.currentRegion
                         + " currentTarget - " + ZeldaManager.currentTarget);
 

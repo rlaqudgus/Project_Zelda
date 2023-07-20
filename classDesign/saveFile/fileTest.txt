@@ -1,0 +1,11 @@
+{
+  "itemList": [],
+  "state": 3,
+  "name": null,
+  "hp": 19,
+  "maxHp": 4,
+  "gold": 0,
+  "stamina": 1.0,
+  "atk": 1,
+  "def": 0
+}
