@@ -65,6 +65,7 @@ namespace classDesign
             ZeldaManager.currentLink.itemList.Remove(this);
             ZeldaManager.allRegionEffectInstance.Remove(this);
         }
+
     }
     class FishMeat : ZeldaItem, IRegionEffect
     {

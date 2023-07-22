@@ -268,17 +268,20 @@
 
         public void EffectByCold()
         {
+            int dmg = 1;
             ZeldaLog("너무 춥습니다. 방한대책을 마련한 뒤 다시 방문하는 것을 추천합니다.");
-            ZeldaManager.currentLink.hp -= 1;
-            ZeldaLog($"hp : {ZeldaManager.currentLink.hp}");
+
+            ZeldaLog($"현재 체력 {ZeldaManager.currentLink.hp}에서 {dmg} 만큼 피해를 입어 " +
+                $"{ZeldaManager.currentLink.hp -= dmg} 이 되었다.");
         }
 
         public void EffectByLava()
         {
+            int dmg = 10;
             ZeldaLog("용암의 열기를 도저히 견딜 수 없습니다.");
-            ZeldaManager.currentLink.hp -= 10;
-            ZeldaLog($"hp : {ZeldaManager.currentLink.hp}");
 
+            ZeldaLog($"현재 체력 {ZeldaManager.currentLink.hp}에서 {dmg} 만큼 피해를 입어 " +
+                $"{ZeldaManager.currentLink.hp -= dmg} 이 되었다.");
         }
     }
 
