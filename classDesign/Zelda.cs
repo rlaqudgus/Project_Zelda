@@ -117,6 +117,7 @@
             }
             finally
             {
+                //ZeldaManager.RegionEffect();
                 ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
@@ -144,6 +145,7 @@
             }
             finally
             {
+                //ZeldaManager.RegionEffect();
                 ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
@@ -266,6 +268,13 @@
                     ZeldaLog("현재 아이템");
 
                     foreach (var item in ZeldaManager.currentLink.itemList)
+                    {
+                        ZeldaLog(item.ToString());
+                    }
+
+                    ZeldaLog("현재 IregionEffect 인스턴스");
+
+                    foreach (var item in ZeldaManager.allRegionEffectInstance)
                     {
                         ZeldaLog(item.ToString());
                     }

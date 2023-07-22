@@ -1,7 +1,7 @@
 ﻿
 namespace classDesign
 {
-    class Meat : ZeldaItem
+    class Meat : ZeldaItem, IRegionEffect
     {
         //int hpEffect = 1;
         // 인스턴스 생성 시 매개변수로 미리 정보 넣는 방식 채택하는게 좋을듯. 현재 방식은 클래스 생성자 내에서 타입, 능력, 이펙트까지 다 결정
@@ -37,8 +37,6 @@ namespace classDesign
         //그렇다면 인벤에서 접근했을때는?
         public override void ZeldaSelect()
         {
-            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
-            //base.ZeldaLogic(ZeldaInput());
             base.ZeldaSelect();
         }
 
@@ -48,8 +46,27 @@ namespace classDesign
             base.ItemEffect();
             //ZeldaManager.currentLink.hp += hpEffect;
         }
+
+        public void EffectByHeat()
+        {
+            ZeldaLog("고기가 말라붙어서 회복량이 감소했습니다.");
+            effect -= 1;
+        }
+
+        public void EffectByCold()
+        {
+            ZeldaLog("얼린 고기로 변했다.");
+            ability = Ability.Ice;
+        }
+
+        public void EffectByLava()
+        {
+            ZeldaLog("고기가 불타 없어졌다.");
+            ZeldaManager.currentLink.itemList.Remove(this);
+            ZeldaManager.allRegionEffectInstance.Remove(this);
+        }
     }
-    class FishMeat : ZeldaItem
+    class FishMeat : ZeldaItem, IRegionEffect
     {
         public FishMeat()
         {
@@ -92,9 +109,24 @@ namespace classDesign
             base.ItemEffect();
             //ZeldaManager.currentLink.hp += hpEffect;
         }
+
+        public void EffectByHeat()
+        {
+            
+        }
+
+        public void EffectByCold()
+        {
+            
+        }
+
+        public void EffectByLava()
+        {
+            
+        }
     }
 
-    class Spear : ZeldaItem
+    class Spear : ZeldaItem, IRegionEffect
     {
         public Spear()
         {
@@ -132,6 +164,21 @@ namespace classDesign
             ZeldaLog($"링크가 {this.GetType().Name}을/를 장착하여 공격력이 {effect} 만큼 상승했다.");
             base.ItemEffect();
             //ZeldaManager.currentLink.hp += hpEffect;
+        }
+
+        public void EffectByHeat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByCold()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByLava()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -214,7 +261,7 @@ namespace classDesign
         }
     }
 
-    class Horn : ZeldaItem
+    class Horn : ZeldaItem, IRegionEffect
     {
         public Horn()
         {
@@ -231,6 +278,23 @@ namespace classDesign
             cost = 10;
         }
 
+        public void EffectByCold()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByHeat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByLava()
+        {
+            //ZeldaLog("뿔이 타서 없어졌다.");
+            //ZeldaManager.currentLink.itemList.Remove(this);
+            //ZeldaManager.allRegionEffectInstance.Remove(this);
+        }
+
         public override void ZeldaSelect()
         {
             //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
@@ -239,7 +303,7 @@ namespace classDesign
         }
     }
 
-    class Teeth : ZeldaItem
+    class Teeth : ZeldaItem, IRegionEffect
     {
         public Teeth()
         {
@@ -256,6 +320,21 @@ namespace classDesign
             cost = 10;
         }
 
+        public void EffectByCold()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByHeat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByLava()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void ZeldaSelect()
         {
             base.ZeldaSelect();
@@ -270,6 +349,7 @@ namespace classDesign
             ability = Ability.Normal;
             cost = 30;
         }
+
         public KeeseEye(Type type, Ability ability, int effect, int cost)
         {
             this.type = type;
@@ -277,13 +357,14 @@ namespace classDesign
             this.effect = effect;
             this.cost = cost;
         }
+
         public override void ZeldaSelect()
         {
             base.ZeldaSelect();
         }
     }
 
-    class KeeseWing : ZeldaItem
+    class KeeseWing : ZeldaItem, IRegionEffect
     {
         public KeeseWing()
         {
@@ -298,13 +379,29 @@ namespace classDesign
             this.effect = effect;
             this.cost = cost;
         }
+
+        public void EffectByCold()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByHeat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByLava()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void ZeldaSelect()
         {
             base.ZeldaSelect();
         }
     }
 
-    class ChuchuJelly : ZeldaItem
+    class ChuchuJelly : ZeldaItem, IRegionEffect
     {
         public ChuchuJelly()
         {
@@ -319,6 +416,27 @@ namespace classDesign
             this.effect = effect;
             this.cost = cost;
         }
+
+        public void EffectByCold()
+        {
+            ZeldaLog("츄츄젤리가 하얀츄츄젤리로 변했다!");
+            ability = Ability.Ice;   
+        }
+
+        public void EffectByHeat()
+        {
+            ZeldaLog("츄츄젤리가 쪼그라들어서 파괴되었다.");
+            ZeldaManager.currentLink.itemList.Remove(this);
+            ZeldaManager.allRegionEffectInstance.Remove(this);
+            ZeldaManager.isItemGone = true;
+        }
+
+        public void EffectByLava()
+        {
+            ZeldaLog("츄츄젤리가 빨간츄츄젤리로 변했다!");
+            ability = Ability.Fire;
+        }
+
         public override void ZeldaSelect()
         {
             base.ZeldaSelect();

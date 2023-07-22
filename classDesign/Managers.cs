@@ -12,23 +12,9 @@ namespace classDesign
         static public Stack<Zelda> GetZeldas = new Stack<Zelda>();
         static public Zelda currentZelda;
         static public Zelda currentState;
+        static public List<IRegionEffect> allRegionEffectInstance = new List<IRegionEffect>();
+        static public bool isItemGone;
         //static public Stack<Object> GetZeldaObjects = new Stack<Object>();
-        static public void LinkStat()
-        {
-            Console.WriteLine(currentLink.stamina);
-            Console.WriteLine(currentLink.hp);
-            Console.WriteLine(currentLink.gold);
-            Console.WriteLine(currentLink.name);
-            Console.WriteLine(currentLink.atk);
-        }
-
-        static public void AllZeldaInstances()
-        {
-            foreach (var item in GetZeldas)
-            {
-                item.ZeldaSelect();
-            }
-        }
 
         static public void MoveBack()
         {
@@ -196,6 +182,7 @@ namespace classDesign
             if (instance.GetType().IsSubclassOf(typeof(ZeldaRegion)))
             {
                 currentRegion = (ZeldaRegion)instance;
+                RegionEffect();
             }
             if (instance.GetType().IsSubclassOf(typeof(Animal)) || instance.GetType().IsSubclassOf(typeof(Monster)))
             {
@@ -209,19 +196,86 @@ namespace classDesign
             {
                 currentLink.state = Link.LinkState.Hunt;
             }
-        }
-        static void SwitchCurrentState(Type type, Zelda instance)
-        {
-            if (type.IsSubclassOf(typeof(ZeldaRegion)))
+            if (instance is IRegionEffect)
             {
-                currentRegion = (ZeldaRegion)instance;
+                allRegionEffectInstance.Add((IRegionEffect)instance);
+            }
+        }
+
+        static public void RegionEffect()
+        {
+            switch (currentRegion)
+            {
+                case GrassLand:
+                    break;
+
+                case Volcano:
+                    //foreach (var item in allRegionEffectInstance)
+                    //{
+                    //    item.EffectByLava();       
+                    //}
+
+                    for (int i = 0; i < allRegionEffectInstance.Count; i++)
+                    {
+                        allRegionEffectInstance[i].EffectByLava();
+
+                        if (isItemGone)
+                        {
+                            i -= 1;
+                        }
+
+                        isItemGone = false;
+                    }
+                    //여기서 해줘야함
+
+                    break;
+
+                case SnowField:
+                    //foreach (var item in allRegionEffectInstance)
+                    //{
+                    //    item.EffectByCold();
+                    //}
+                    for (int i = 0; i < allRegionEffectInstance.Count; i++)
+                    {
+                        allRegionEffectInstance[i].EffectByCold();
+
+                        if (isItemGone)
+                        {
+                            i -= 1;
+                        }
+
+                        isItemGone = false;
+                    }
+                    break;
+
+                case Desert:
+                    //foreach (var item in allRegionEffectInstance)
+                    //{
+                    //    item.EffectByHeat();
+                    //}
+                    for (int i = 0; i < allRegionEffectInstance.Count; i++)
+                    {
+                        allRegionEffectInstance[i].EffectByHeat();
+
+                        if (isItemGone)
+                        {
+                            i -= 1;
+                        }
+
+                        isItemGone = false;
+                    }
+                    break;
+
+                default:
+                    break;
             }
 
-            if (type.IsSubclassOf(typeof(Animal))||type.IsSubclassOf(typeof(Monster)))
+            if (currentLink.hp<=0)
             {
-                currentTarget = (ZeldaCreature)instance;
+                allRegionEffectInstance.Clear();
+                currentLink.Die();
+                
             }
-            
         }
     }
 

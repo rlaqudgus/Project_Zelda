@@ -155,7 +155,7 @@
        
     }
 
-    class Monster : ZeldaCreature, IRegionEffect
+    class Monster : ZeldaCreature
     {
         public Monster()
         {

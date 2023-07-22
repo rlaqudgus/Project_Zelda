@@ -1,10 +1,102 @@
 {
-  "itemList": [],
-  "state": 3,
+  "itemList": [
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    },
+    {
+      "$type": "classDesign.Meat, classDesign",
+      "type": 4,
+      "ability": 4,
+      "effect": 3,
+      "cost": 15
+    }
+  ],
+  "state": 2,
   "name": null,
-  "hp": 19,
+  "hp": 9,
   "maxHp": 4,
-  "gold": 0,
+  "gold": 55,
   "stamina": 1.0,
   "atk": 1,
   "def": 0

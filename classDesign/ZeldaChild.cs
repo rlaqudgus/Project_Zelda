@@ -24,7 +24,7 @@
             //ZeldaManager.GetZeldas.Add(this);
 
             ZeldaChoice<Mode>("안녕하세요. 젤다의 세계로 오신 것을 환영합니다. " +
-                "새 게임 또는 불러올 게임을 선택해주십시오. 종료하시려면 언제든 \"종료\"를 입력하십시오.");
+                "새 게임 또는 불러올 게임을 선택해주십시오. 종료하시려면 언제든 \"exit\" 및 \"종료\"를 입력하십시오.");
 
             ZeldaLogic(ZeldaInput());
         }
@@ -36,6 +36,8 @@
             //여기서 멈춘것. 한사이클 다 돌았으니 다시 여기서부터 출발한다.
             try 
             {
+                ZeldaManager.allRegionEffectInstance.Clear();
+
                 ZeldaThrow(input);
                 switch (input)
                 {
@@ -71,11 +73,6 @@
     //주인공 클래스 게임시작 시 클래스 생성, 게임 과정 중 업데이트되어야함
     class Link : Zelda, IRegionEffect
     {
-        //public Dictionary<int, Type> logicDictionary = new Dictionary<int, Type>()
-        //{
-        //    { 1, typeof(ZeldaCreature)},
-        //    { 5, typeof(ZeldaInventory)},
-        //};
 
         public List<ZeldaItem> itemList = new List<ZeldaItem>();
         public enum LinkFunction { Warp = 1, Inven, Save }
@@ -155,8 +152,12 @@
             ZeldaLog(creature + "을/를 공격");
 
             creature.currentHp -= atk;
-            hp -= creature.atk;
+
             creature.TakeHit();
+
+            int damage = def > creature.atk ? 0 : creature.atk - def;
+
+            hp -= damage;
 
             ZeldaLog(creature + "의 현재 체력 : " + creature.currentHp);
             ZeldaLog("현재 체력 : " + hp);
@@ -222,16 +223,6 @@
                         Die();
                         break;
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ZeldaCatch(ex);
-
-            //}
-            //finally
-            //{
-            //    ZeldaManager.currentZelda.ZeldaSelect();
-            //}
         }
         public override void ZeldaLogic(string input)
         {
@@ -249,7 +240,7 @@
                     case "3":
                         //dosth 저장하기
                         FileManager.SaveFile();
-                        ZeldaLog("저장기능추가예정");
+                        ZeldaLog("저장 완료.");
                         break;
                 }
             }
@@ -267,17 +258,27 @@
 
         public void EffectByHeat()
         {
-            ZeldaLog("Too Hot!");
+            int dmg = 1;
+
+            ZeldaLog("너무 덥습니다. 대책을 마련한 뒤 다시 방문하는 것을 추천합니다.");
+            
+            ZeldaLog($"현재 체력 {ZeldaManager.currentLink.hp}에서 {dmg} 만큼 피해를 입어 " +
+                $"{ZeldaManager.currentLink.hp-=dmg} 이 되었다.");
         }
 
         public void EffectByCold()
         {
-            ZeldaLog("Too Cold!");
+            ZeldaLog("너무 춥습니다. 방한대책을 마련한 뒤 다시 방문하는 것을 추천합니다.");
+            ZeldaManager.currentLink.hp -= 1;
+            ZeldaLog($"hp : {ZeldaManager.currentLink.hp}");
         }
 
         public void EffectByLava()
         {
-            ZeldaLog("I'm Burning!");
+            ZeldaLog("용암의 열기를 도저히 견딜 수 없습니다.");
+            ZeldaManager.currentLink.hp -= 10;
+            ZeldaLog($"hp : {ZeldaManager.currentLink.hp}");
+
         }
     }
 
@@ -483,6 +484,9 @@
                 case Type.Weapon:
                     ZeldaManager.currentLink.atk += effect;
                     break;
+                case Type.Shield:
+                    ZeldaManager.currentLink.def += effect;
+                    break;
                 case Type.Clothes:
                     ZeldaManager.currentLink.def += effect;
                     break;
@@ -542,6 +546,7 @@
             }
             finally
             {
+                //ZeldaManager.RegionEffect();
                 ZeldaManager.currentZelda.ZeldaSelect();
             }
         }
@@ -677,6 +682,7 @@
             finally 
             {
                 ZeldaManager.currentZelda.ZeldaSelect();
+                //ZeldaManager.RegionEffect();
             }
         }
 
@@ -739,7 +745,8 @@
             }
             finally
             {
-                ZeldaManager.GetZeldas.Peek().ZeldaSelect();
+                ZeldaManager.currentZelda.ZeldaSelect();
+                //ZeldaManager.RegionEffect();
             }
         }
     }
