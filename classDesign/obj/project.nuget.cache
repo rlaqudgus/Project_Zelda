@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "cBIwDDY6jDpNAPh8drEoi99742AoEuZ0V69+2ilDymg9g72z0tdKb6ttq2MihzfmFh9NDCHqGPBzISQdVBrDDw==",
+  "dgSpecHash": "uYcERZQR1vVcXeo9Jpvq8+ogju66RXnUAzxek05emG7qaO6flzZGBPnVS1Due8xcYNmSDemIonCSZMWrrwn24w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
+  "projectFilePath": "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\kbh39\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\ugane\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }

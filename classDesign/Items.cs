@@ -265,7 +265,7 @@ namespace classDesign
     {
         public Horn()
         {
-            type = Type.Weapon;
+            type = Type.Material;
             ability = Ability.Normal;
             cost = 100;
         }
@@ -307,7 +307,7 @@ namespace classDesign
     {
         public Teeth()
         {
-            type = Type.Weapon;
+            type = Type.Material;
             ability = Ability.Normal;
             cost = 100;
         }
@@ -443,4 +443,153 @@ namespace classDesign
         }
     }
 
+    class Nail : ZeldaItem, IRegionEffect
+    {
+        public Nail()
+        {
+            type = Type.Material;
+            ability = Ability.Normal;
+            cost = 100;
+        }
+
+        public Nail(string explain)
+        {
+            ZeldaLog(explain);
+            type = Type.Material;
+            ability = Ability.Normal;
+            cost = 10;
+        }
+
+        public void EffectByCold()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByHeat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByLava()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ZeldaSelect()
+        {
+            base.ZeldaSelect();
+        }
+    }
+
+    class Boomerang : ZeldaItem, IRegionEffect
+    {
+        public Boomerang()
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            effect = 5;
+            cost = 100;
+        }
+
+        public Boomerang(string explain)
+        {
+            type = Type.Weapon;
+            ability = Ability.Normal;
+            effect = 5;
+            cost = 100;
+            ZeldaLog(explain);
+
+        }
+        public Boomerang(Type type, Ability ability, int effect, int cost)
+        {
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        public override void ZeldaSelect()
+        {
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
+        }
+
+        public override void ItemEffect()
+        {
+            ZeldaLog($"링크가 {this.GetType().Name}을/를 장착하여 공격력이 {effect} 만큼 상승했다.");
+            base.ItemEffect();
+            //ZeldaManager.currentLink.hp += hpEffect;
+        }
+
+        public void EffectByHeat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByCold()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByLava()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class RandomBox : ZeldaItem, IRegionEffect
+    {
+        public RandomBox()
+        {
+            type = Type.Material;
+            ability = Ability.Normal;
+            effect = 5;
+            cost = 100;
+        }
+
+        public RandomBox(string explain)
+        {
+            type = Type.Material;
+            ability = Ability.Normal;
+            effect = 0;
+            cost = 100;
+            ZeldaLog(explain);
+
+        }
+        public RandomBox(Type type, Ability ability, int effect, int cost)
+        {
+            this.type = type;
+            this.ability = ability;
+            this.effect = effect;
+            this.cost = cost;
+        }
+        public override void ZeldaSelect()
+        {
+            //ZeldaChoice<ItemChoice>("행동을 선택하십시오.");
+            //base.ZeldaLogic(ZeldaInput());
+            base.ZeldaSelect();
+        }
+
+        public override void ItemEffect()
+        {
+            ZeldaLog($"{this.GetType().Name}를 사용했다.");
+            base.ItemEffect();
+            //ZeldaManager.currentLink.hp += hpEffect;
+        }
+
+        public void EffectByHeat()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByCold()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EffectByLava()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
