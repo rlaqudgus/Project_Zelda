@@ -281,7 +281,7 @@ namespace classDesign
 
     static class FileManager
     {
-        static string path = "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\saveFile\\fileTest.txt";
+        static string path = "./fileTest.txt";
         static public void SaveFile()
         {
             File.WriteAllText(path, String.Empty);
