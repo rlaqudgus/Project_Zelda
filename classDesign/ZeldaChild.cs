@@ -494,7 +494,24 @@
                     ZeldaManager.currentLink.def += effect;
                     break;
                 case Type.Material:
-                    throw new Exception("UseMaterialException");
+                    if (GetType().ToString() == "RandomBox")
+                    {
+                        Random random = new Random();
+                        switch(random.Next(0,3))
+                        {
+                            case 0:
+                                ZeldaManager.CreateInstance<Sword>(true);
+                                break;
+                            case 1:
+                                ZeldaManager.CreateInstance<Shield>(true);
+                                break;
+                            case 2:
+                                ZeldaManager.CreateInstance<Spear>(true);
+                                break;
+                        }
+                        break;
+                    }
+                    else throw new Exception("UseMaterialException");
                 default:
                     break;
             }

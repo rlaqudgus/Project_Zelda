@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj": {}
+    "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj": {
+    "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
+        "projectUniqueName": "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
         "projectName": "classDesign",
-        "projectPath": "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
-        "packagesPath": "C:\\Users\\kbh39\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kbh39\\Documents\\GitHub\\Project_Zelda\\classDesign\\obj\\",
+        "projectPath": "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\classDesign.csproj",
+        "packagesPath": "C:\\Users\\ugane\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ugane\\Documents\\GitHub\\Project_Zelda\\classDesign\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\kbh39\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\ugane\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

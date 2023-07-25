@@ -232,4 +232,128 @@ namespace classDesign
             ZeldaManager.CreateInstance<Sword>(true, ZeldaItem.Type.Weapon, ZeldaItem.Ability.Fire, 20, 150);
         }
     }
+
+    class Lizalfos : Monster
+    {
+        public Lizalfos()
+        {
+
+        }
+
+        public Lizalfos(string explain)
+        {
+            ZeldaLog(explain);
+            fullHp = 10;
+            currentHp = 10;
+            atk = 2;
+            name = "Lizalfos";
+        }
+
+        public override void ZeldaSelect()
+        {
+            ZeldaChoice<MonsterChoice>("행동을 선택하십시오.");
+            base.ZeldaLogic(ZeldaInput());
+        }
+
+        public override void TakeHit()
+        {
+            ZeldaLog(this.name + " got Hit");
+        }
+
+        //아이템이 많을 경우 배열이나 리스트를 받고 loop 돌면서 한꺼번에 생성해주는 메서드가 필요할듯하다
+        public override void Die()
+        {
+            ZeldaLog(this.name + " Died");
+        }
+
+        public override void DropItem()
+        {
+            ZeldaManager.CreateInstance<Horn>(true);
+            ZeldaManager.CreateInstance<Nail>(true);
+            ZeldaManager.CreateInstance<Spear>(true, ZeldaItem.Type.Weapon, ZeldaItem.Ability.Normal, 5, 40);
+            ZeldaManager.CreateInstance<Boomerang>(true, ZeldaItem.Type.Weapon, ZeldaItem.Ability.Normal, 4, 30);
+        }
+    }
+
+    class Lynel : Monster
+    {
+        public Lynel()
+        {
+
+        }
+
+        public Lynel(string explain)
+        {
+            ZeldaLog(explain);
+            fullHp = 150;
+            currentHp = 150;
+            atk = 15;
+            name = "Lynel";
+        }
+
+        public override void ZeldaSelect()
+        {
+            ZeldaChoice<MonsterChoice>("행동을 선택하십시오.");
+            base.ZeldaLogic(ZeldaInput());
+        }
+
+        public override void TakeHit()
+        {
+            ZeldaLog(this.name + " got Hit");
+        }
+
+        //아이템이 많을 경우 배열이나 리스트를 받고 loop 돌면서 한꺼번에 생성해주는 메서드가 필요할듯하다
+        public override void Die()
+        {
+            ZeldaLog(this.name + " Died");
+        }
+
+        public override void DropItem()
+        {
+            ZeldaManager.CreateInstance<Horn>(true);
+            ZeldaManager.CreateInstance<Nail>(true);
+            ZeldaManager.CreateInstance<Sword>(true, ZeldaItem.Type.Weapon, ZeldaItem.Ability.Normal, 10, 100);
+            ZeldaManager.CreateInstance<Shield>(true, ZeldaItem.Type.Shield, ZeldaItem.Ability.Normal, 10, 100);
+            ZeldaManager.CreateInstance<Spear>(true, ZeldaItem.Type.Weapon, ZeldaItem.Ability.Normal, 15, 100);
+        }
+    }
+
+    class Molduga : Monster
+    {
+        public Molduga()
+        {
+
+        }
+
+        public Molduga(string explain)
+        {
+            ZeldaLog(explain);
+            fullHp = 100;
+            currentHp = 100;
+            atk = 10;
+            name = "Molduga";
+        }
+
+        public override void ZeldaSelect()
+        {
+            ZeldaChoice<MonsterChoice>("행동을 선택하십시오.");
+            base.ZeldaLogic(ZeldaInput());
+        }
+
+        public override void TakeHit()
+        {
+            ZeldaLog(this.name + " got Hit");
+        }
+
+        //아이템이 많을 경우 배열이나 리스트를 받고 loop 돌면서 한꺼번에 생성해주는 메서드가 필요할듯하다
+        public override void Die()
+        {
+            ZeldaLog(this.name + " Died");
+        }
+
+        public override void DropItem()
+        {
+            ZeldaManager.CreateInstance<RandomBox>(true);
+        }
+    }
 }
